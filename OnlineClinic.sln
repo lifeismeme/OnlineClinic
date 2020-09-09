@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.1209
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineClinic", "OnlineClinic\OnlineClinic.csproj", "{CBECD06D-D5AD-4D1C-88CF-86465B0F3B6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineClinicUnitTest", "OnlineClinicUnitTest\OnlineClinicUnitTest.csproj", "{E40E025F-003E-46E8-821B-C5A34343006F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineClinicUnitTest", "OnlineClinicUnitTest\OnlineClinicUnitTest.csproj", "{E40E025F-003E-46E8-821B-C5A34343006F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
