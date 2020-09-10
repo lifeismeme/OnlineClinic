@@ -15,14 +15,18 @@ namespace OnlineClinic.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            builder.ConfigureServices((context, services) => {
-                services.AddDbContext<OnlineClinicContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("OnlineClinicContextConnection")));
+            /*
+             * Moved to Startup.cs
+             */
 
-                services.AddDefaultIdentity<User>()
-                    .AddEntityFrameworkStores<OnlineClinicContext>();
-            });
+            //builder.ConfigureServices((context, services) => {
+            //    services.AddDbContext<OnlineClinicContext>(options =>
+            //        options.UseSqlServer(
+            //            context.Configuration.GetConnectionString("OnlineClinicContextConnection")));
+
+            //    services.AddDefaultIdentity<User>()
+            //        .AddEntityFrameworkStores<OnlineClinicContext>();
+            //});
         }
     }
 }

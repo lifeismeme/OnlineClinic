@@ -1,0 +1,39 @@
+﻿@model IEnumerable<OnlineClinic.Models.Appointment>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Date Time</th>
+			<th>until</th>
+			<th>Duration</th>
+			<th>is cancel</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (Appointment A in Model)
+		{
+			<tr>
+				<td>@A.Id</td>
+				<td>@A.Slot.TimeStart</td>
+				<td>@A.Slot.TimeEnd</td>
+				<td>@A.Slot.Duration</td>
+				<td>@A.IsCancelled</td>
+
+				<td>
+					<a asp-action="Details" asp-route-id="@A.Id">Details</a> |
+					<a asp-action="Cancel" asp-route-id="@A.Id">Cancel</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

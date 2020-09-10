@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineClinic.Areas.Identity.Data;
+using OnlineClinic.Models;
 
 namespace OnlineClinic.Models
 {
@@ -23,5 +24,7 @@ namespace OnlineClinic.Models
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<OnlineClinic.Models.Appointment> Appointment { get; set; }
     }
 }
