@@ -10,8 +10,8 @@ using OnlineClinic.Models;
 namespace OnlineClinic.Migrations
 {
     [DbContext(typeof(OnlineClinicContext))]
-    [Migration("20200909184358_ver2")]
-    partial class ver2
+    [Migration("20200911162258_f")]
+    partial class f
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -166,8 +166,6 @@ namespace OnlineClinic.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("Role");
-
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -194,11 +192,17 @@ namespace OnlineClinic.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("PatientId");
+                    b.Property<int>("DoctorId");
 
-                    b.Property<int?>("SlotId");
+                    b.Property<bool>("IsCancelled");
+
+                    b.Property<int>("PatientId");
+
+                    b.Property<int>("SlotId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
 
                     b.HasIndex("PatientId");
 
@@ -213,13 +217,21 @@ namespace OnlineClinic.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Password")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Phone");
+                    b.Property<string>("Phone")
+                        .HasMaxLength(16);
+
+                    b.Property<string>("UID")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -234,11 +246,34 @@ namespace OnlineClinic.Migrations
 
                     b.Property<TimeSpan>("Duration");
 
+                    b.Property<bool>("IsBooked");
+
                     b.Property<DateTime>("TimeStart");
 
                     b.HasKey("Id");
 
                     b.ToTable("Slot");
+                });
+
+            modelBuilder.Entity("OnlineClinic.Models.Staff", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<int>("Title")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("UID")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Staff");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -288,13 +323,20 @@ namespace OnlineClinic.Migrations
 
             modelBuilder.Entity("OnlineClinic.Models.Appointment", b =>
                 {
+                    b.HasOne("OnlineClinic.Models.Staff", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("OnlineClinic.Models.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatientId");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineClinic.Models.Slot", "Slot")
                         .WithMany()
-                        .HasForeignKey("SlotId");
+                        .HasForeignKey("SlotId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

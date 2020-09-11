@@ -9,6 +9,8 @@ using OnlineClinic.Models;
 using OnlineClinic.Repositories;
 using OnlineClinic.Repositories.Fakes;
 using OnlineClinic.Repositories.Mocks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace OnlineClinic.Controllers
 {
@@ -24,11 +26,12 @@ namespace OnlineClinic.Controllers
 		// GET: Appointments
 		public async Task<IActionResult> Index()
 		{
-			var Appointments = new FakeAppointments();
+			IQueryable<Appointment> appointments = from a in _context.Appointment
+					 join p in _context.Patient on a.Patient.Id equals p.Id into ap
+					 select a;
 
-			Appointments.Load();
+			return View(appointments);
 
-			return View(Appointments.GetAllLoaded());
 		}
 
 		// GET: Appointments/Details/5
@@ -55,17 +58,18 @@ namespace OnlineClinic.Controllers
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Slot")] Appointment appointment)
+		public async Task<IActionResult> Create(Appointment appointment)
 		{
-			appointment.Patient = new Patient();
-			appointment.Doctor = new Staff();
-			if (ModelState.IsValid)
-			{
-				_context.Add(appointment);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			return View(appointment);
+			if (appointment.Slot == null)
+				return NotFound();
+
+			appointment.Doctor = Staff.CreateDefaultDoctor();
+			appointment.Patient = Patient.CreatePatient(User);
+			appointment.IsCancelled = false;
+
+			_context.Add(appointment);
+			await _context.SaveChangesAsync();
+			return RedirectToAction(nameof(Index));
 		}
 
 		public async Task<IActionResult> Cancel(int? id)
@@ -77,7 +81,6 @@ namespace OnlineClinic.Controllers
 				.FirstOrDefaultAsync(m => m.Id == id);
 			if (appointment == null)
 				return NotFound();
-
 			return View(appointment);
 		}
 

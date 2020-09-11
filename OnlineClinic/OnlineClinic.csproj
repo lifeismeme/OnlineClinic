@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200911154802_ChangetoUID.cs" />
+    <Compile Remove="Migrations\20200911154802_ChangetoUID.Designer.cs" />
+    <Compile Remove="Migrations\20200911155110_ChangetoUID2.cs" />
+    <Compile Remove="Migrations\20200911155110_ChangetoUID2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />

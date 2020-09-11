@@ -12,6 +12,10 @@ namespace OnlineClinic.Models
 {
     public class OnlineClinicContext : IdentityDbContext<User>
     {
+        public OnlineClinicContext()
+            : base()
+        {
+        }
         public OnlineClinicContext(DbContextOptions<OnlineClinicContext> options)
             : base(options)
         {
@@ -26,5 +30,8 @@ namespace OnlineClinic.Models
         }
 
         public DbSet<OnlineClinic.Models.Appointment> Appointment { get; set; }
+        public DbSet<OnlineClinic.Models.Staff> Staff { get; set; }
+        public DbSet<OnlineClinic.Models.Patient> Patient { get; set; }
+        public DbSet<OnlineClinic.Models.Slot> Slot { get; set; }
     }
 }

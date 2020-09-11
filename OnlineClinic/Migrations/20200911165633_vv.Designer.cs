@@ -10,8 +10,8 @@ using OnlineClinic.Models;
 namespace OnlineClinic.Migrations
 {
     [DbContext(typeof(OnlineClinicContext))]
-    [Migration("20200910101059_Ver4")]
-    partial class Ver4
+    [Migration("20200911165633_vv")]
+    partial class vv
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -166,8 +166,6 @@ namespace OnlineClinic.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<int>("Role");
-
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -220,7 +218,6 @@ namespace OnlineClinic.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(128);
 
                     b.Property<string>("Name")
@@ -228,12 +225,13 @@ namespace OnlineClinic.Migrations
                         .HasMaxLength(128);
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasMaxLength(128);
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasMaxLength(16);
+
+                    b.Property<string>("UID")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -269,6 +267,9 @@ namespace OnlineClinic.Migrations
 
                     b.Property<int>("Title")
                         .HasMaxLength(128);
+
+                    b.Property<string>("UID")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
