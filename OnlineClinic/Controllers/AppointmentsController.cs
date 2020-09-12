@@ -6,11 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineClinic.Models;
-using OnlineClinic.Repositories;
-using OnlineClinic.Repositories.Fakes;
-using OnlineClinic.Repositories.Mocks;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 
 namespace OnlineClinic.Controllers
 {
@@ -26,9 +22,21 @@ namespace OnlineClinic.Controllers
 		// GET: Appointments
 		public async Task<IActionResult> Index()
 		{
-			IQueryable<Appointment> appointments = from a in _context.Appointment
-					 join p in _context.Patient on a.Patient.Id equals p.Id into ap
-					 select a;
+			var patientAspNetUsersId = Patient.CreatePatient(User).AspNetUsersId;
+			var patient = (from p in _context.Patient
+						   where p.AspNetUsersId == patientAspNetUsersId
+						   select p).First();
+			IQueryable<Appointment> allAppointments =
+				from a in _context.Appointment
+				where a.PatientId == patient.Id && a.IsCancelled == false
+				select a;
+
+			var appointments = allAppointments.ToList<Appointment>();
+			appointments.ForEach(a => a.Patient = patient);
+
+			appointments.ForEach(a => a.Slot = (from s in _context.Slot
+												where s.Id == a.SlotId
+												select s).First());
 
 			return View(appointments);
 
@@ -62,14 +70,25 @@ namespace OnlineClinic.Controllers
 		{
 			if (appointment.Slot == null)
 				return NotFound();
+			try
+			{
+				Patient patient = _context.Patient.First(p => p.AspNetUsersId == Patient.CreatePatient(User).AspNetUsersId);
+				//appointment.Slot = _context.Slot.First(s => s.TimeStart == appointment.Slot.TimeStart);
+				appointment.Doctor = (Doctor)_context.Staff.First();
+				appointment.Patient = _context.Patient.First(p => p.Id == patient.Id);
+				appointment.IsCancelled = false;
 
-			appointment.Doctor = Staff.CreateDefaultDoctor();
-			appointment.Patient = Patient.CreatePatient(User);
-			appointment.IsCancelled = false;
+				_context.Add(appointment);
 
-			_context.Add(appointment);
-			await _context.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
+				await _context.SaveChangesAsync();
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex.Message);
+				return NotFound();
+			}
+			
 		}
 
 		public async Task<IActionResult> Cancel(int? id)

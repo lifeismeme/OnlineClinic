@@ -11,10 +11,11 @@ namespace OnlineClinic.Models
 {
 	public class Patient
 	{
+		[Key]
 		public int Id { get; set; }
 
 		[Required]
-		public string UID { get; set; }
+		public string AspNetUsersId { get; set; }
 
 
 		[StringLength(128)]
@@ -38,7 +39,7 @@ namespace OnlineClinic.Models
 		{
 			return new Patient()
 			{
-				UID = User.FindFirst(ClaimTypes.NameIdentifier).Value,
+				AspNetUsersId = User.FindFirst(ClaimTypes.NameIdentifier).Value,
 				Name = User.Identity.Name
 			};
 		}

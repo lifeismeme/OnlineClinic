@@ -20,7 +20,7 @@ namespace OnlineClinicUnitTest
 			var controller = new AppointmentsController(mockContext.Object);
 			var appointment = new Appointment() {
 				Id = 1,
-				Doctor = new Staff(),
+				Doctor = new Doctor(),
 				Patient = new Patient(),
 				Slot = new Slot()
 			};

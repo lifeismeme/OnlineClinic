@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,13 +9,11 @@ namespace OnlineClinic.Models
 {
 	public class Staff
 	{
-		public static readonly string DoctorId = "8245fdac-ae34-49bc-afa1-b7a9917d55af";
-		public static readonly string DoctorName = "MrDoctor";
-
+		[Key]
 		public int Id { get; set; }
 
 		[Required]
-		public string UID { get; set; }
+		public string AspNetUsersId { get; set; }
 
 		[Required]
 		[StringLength(128, MinimumLength = 1)]
@@ -30,14 +29,5 @@ namespace OnlineClinic.Models
 			Doctor
 		}
 
-		public static Staff CreateDefaultDoctor()
-		{
-			return new Staff()
-			{
-				UID = DoctorId,
-				Name = DoctorName,
-				Title = JobTitle.Doctor
-			};
-		}
 	}
 }

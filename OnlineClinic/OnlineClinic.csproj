@@ -10,6 +10,12 @@
     <Compile Remove="Migrations\20200911154802_ChangetoUID.Designer.cs" />
     <Compile Remove="Migrations\20200911155110_ChangetoUID2.cs" />
     <Compile Remove="Migrations\20200911155110_ChangetoUID2.Designer.cs" />
+    <Compile Remove="Migrations\20200912091825_PkFk.cs" />
+    <Compile Remove="Migrations\20200912091825_PkFk.Designer.cs" />
+    <Compile Remove="Migrations\20200912092414_PkFk.cs" />
+    <Compile Remove="Migrations\20200912092414_PkFk.Designer.cs" />
+    <Compile Remove="Migrations\20200912095536_PkFk2.cs" />
+    <Compile Remove="Migrations\20200912095536_PkFk2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

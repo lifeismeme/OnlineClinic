@@ -215,6 +215,9 @@ namespace OnlineClinic.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AspNetUsersId")
+                        .IsRequired();
+
                     b.Property<string>("Email")
                         .HasMaxLength(128);
 
@@ -227,9 +230,6 @@ namespace OnlineClinic.Migrations
 
                     b.Property<string>("Phone")
                         .HasMaxLength(16);
-
-                    b.Property<string>("UID")
-                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -259,6 +259,12 @@ namespace OnlineClinic.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AspNetUsersId")
+                        .IsRequired();
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128);
@@ -266,12 +272,21 @@ namespace OnlineClinic.Migrations
                     b.Property<int>("Title")
                         .HasMaxLength(128);
 
-                    b.Property<string>("UID")
-                        .IsRequired();
-
                     b.HasKey("Id");
 
                     b.ToTable("Staff");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Staff");
+                });
+
+            modelBuilder.Entity("OnlineClinic.Models.Doctor", b =>
+                {
+                    b.HasBaseType("OnlineClinic.Models.Staff");
+
+
+                    b.ToTable("Doctor");
+
+                    b.HasDiscriminator().HasValue("Doctor");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -321,7 +336,7 @@ namespace OnlineClinic.Migrations
 
             modelBuilder.Entity("OnlineClinic.Models.Appointment", b =>
                 {
-                    b.HasOne("OnlineClinic.Models.Staff", "Doctor")
+                    b.HasOne("OnlineClinic.Models.Doctor", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade);
