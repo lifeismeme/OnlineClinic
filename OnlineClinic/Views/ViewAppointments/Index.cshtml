@@ -1,0 +1,55 @@
+﻿@model IEnumerable<OnlineClinic.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Your Appointments </h2>
+ 
+<table class="table">
+    <thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Slot.TimeStart)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Slot.TimeEnd)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Slot.Duration)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Patient.Name)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsCancelled)
+			</th>
+			<th></th>
+		</tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Slot.TimeStart)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Slot.TimeEnd)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Slot.Duration)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Patient.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.IsCancelled)
+			</td>
+			<td>
+				<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+				<a asp-action="Delete" asp-route-id="@item.Id">Complete</a>
+			</td>
+		</tr>
+}
+    </tbody>
+</table>

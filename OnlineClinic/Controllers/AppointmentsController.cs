@@ -22,22 +22,24 @@ namespace OnlineClinic.Controllers
 		// GET: Appointments
 		public async Task<IActionResult> Index()
 		{
-			var patientAspNetUsersId = Patient.CreatePatient(User).AspNetUsersId;
-			var patient = (from p in _context.Patient
-						   where p.AspNetUsersId == patientAspNetUsersId
-						   select p).First();
-			IQueryable<Appointment> allAppointments =
-				from a in _context.Appointment
-				where a.PatientId == patient.Id && a.IsCancelled == false
-				select a;
+			//var patientAspNetUsersId = Patient.CreatePatient(User).AspNetUsersId;
+			//var patient = (from p in _context.Patient
+			//			   where p.AspNetUsersId == patientAspNetUsersId
+			//			   select p).First();
+			//IQueryable<Appointment> allAppointments =
+			//	from a in _context.Appointment
+			//	where a.PatientId == patient.Id && a.IsCancelled == false
+			//	select a;
 
-			var appointments = allAppointments.ToList<Appointment>();
-			appointments.ForEach(a => a.Patient = patient);
+			//var appointments = allAppointments.ToList<Appointment>();
+			//appointments.ForEach(a => a.Patient = patient);
 
-			appointments.ForEach(a => a.Slot = (from s in _context.Slot
-												where s.Id == a.SlotId
-												select s).First());
+			//appointments.ForEach(a => a.Slot = (from s in _context.Slot
+			//									where s.Id == a.SlotId
+			//									select s).First());
 
+
+			var appointments = _context.Appointment.Include(a => a.Doctor).Include(a => a.Patient).Include(a => a.Slot).ToList();
 			return View(appointments);
 
 		}
@@ -88,7 +90,7 @@ namespace OnlineClinic.Controllers
 				Debug.WriteLine(ex.Message);
 				return NotFound();
 			}
-			
+
 		}
 
 		public async Task<IActionResult> Cancel(int? id)
