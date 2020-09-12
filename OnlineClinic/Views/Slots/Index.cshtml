@@ -1,0 +1,71 @@
+﻿@model IEnumerable<OnlineClinic.Models.Slot>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h2>Slots</h2>
+
+<p>
+	<a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.TimeStart)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Duration)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsBooked)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.TimeStart)
+					<br /> ~
+					@Html.DisplayFor(modelItem => item.TimeEnd)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Duration)
+				</td>
+				<td>
+					@if (item.IsBooked)
+					{
+						<span color="red">
+							<del>Available</del>
+							<br />
+							Booked
+						</span>
+					}
+					else
+					{
+						<b color="green">Available</b>
+					}
+
+				</td>
+
+				<td>
+
+					<a asp-action="Book" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Book</a> |
+
+
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+				</td>
+
+			</tr>
+		}
+	</tbody>
+</table>

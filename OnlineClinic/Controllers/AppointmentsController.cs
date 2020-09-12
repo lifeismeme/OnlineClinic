@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineClinic.Models;
 using System.Diagnostics;
+using OnlineClinic.Repositories;
 
 namespace OnlineClinic.Controllers
 {
@@ -62,7 +63,7 @@ namespace OnlineClinic.Controllers
 		{
 			return View();
 		}
-
+ 
 		// POST: Appointments/Create
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -76,7 +77,7 @@ namespace OnlineClinic.Controllers
 			{
 				Patient patient = _context.Patient.First(p => p.AspNetUsersId == Patient.CreatePatient(User).AspNetUsersId);
 				//appointment.Slot = _context.Slot.First(s => s.TimeStart == appointment.Slot.TimeStart);
-				appointment.Doctor = (Doctor)_context.Staff.First();
+				appointment.Doctor = (Doctor)_context.Staff.FirstOrDefault(s => s.AspNetUsersId == Doctor.DoctorAspNetUsersId);
 				appointment.Patient = _context.Patient.First(p => p.Id == patient.Id);
 				appointment.IsCancelled = false;
 

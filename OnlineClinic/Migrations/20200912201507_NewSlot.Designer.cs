@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineClinic.Models;
 
 namespace OnlineClinic.Migrations
 {
     [DbContext(typeof(OnlineClinicContext))]
-    partial class OnlineClinicContextModelSnapshot : ModelSnapshot
+    [Migration("20200912201507_NewSlot")]
+    partial class NewSlot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

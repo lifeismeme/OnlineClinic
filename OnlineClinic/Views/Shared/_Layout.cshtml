@@ -35,14 +35,15 @@
 					<li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
 					@if (User.Identity.IsAuthenticated)
 					{
-						@if (Doctor.IsDoctor(User))
+					@if (Doctor.IsDoctor(User))
 						{
-							<li><a asp-area="" asp-controller="ViewAppointments" asp-action="Index">View Appointments</a></li>
+					<li><a asp-area="" asp-controller="ViewAppointments" asp-action="Index">View Appointments</a></li>
 						}
 						else
 						{
-							<li><a asp-area="" asp-controller="Appointments" asp-action="Index">Appointment</a></li>
+					<li><a asp-area="" asp-controller="Appointments" asp-action="Index">Appointment</a></li>
 						}
+					<li><a asp-area="" asp-controller="Slots" asp-action="Index">Slots</a></li>
 					}
 				</ul>
 				<partial name="_LoginPartial" />

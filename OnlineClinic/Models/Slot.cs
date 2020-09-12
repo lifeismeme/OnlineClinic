@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace OnlineClinic.Models
 {
-	public class Slot
+	public class Slot : TableEntity
 	{
 		public static readonly TimeSpan DefaultDuration = TimeSpan.FromMinutes(30);
 		public int Id { get; set; }
