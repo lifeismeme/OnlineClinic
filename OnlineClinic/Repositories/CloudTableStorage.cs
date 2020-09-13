@@ -39,6 +39,15 @@ namespace OnlineClinic.Repositories
 				throw new Exception($"data not inserted. http response code: {response.HttpStatusCode} ");
 		}
 
+		public void Update(TableEntity row)
+		{
+			row.ETag = "*";
+			var query = TableOperation.Replace(row);
+			var response = CloudTable.Execute(query);
+			if (response.HttpStatusCode != 204)
+				throw new Exception($"data not replaced. http response code: {response.HttpStatusCode} ");
+		}
+
 		public T Retrieve<T>(string partitionKey, string rowKey) where T : ITableEntity
 		{
 			TableOperation query = TableOperation.Retrieve<T>(partitionKey, rowKey);

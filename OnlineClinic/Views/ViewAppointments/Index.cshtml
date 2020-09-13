@@ -1,14 +1,17 @@
 ﻿@model IEnumerable<OnlineClinic.Models.Appointment>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h2>Your Appointments </h2>
- 
+
 <table class="table">
-    <thead>
+	<thead>
 		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Slot.TimeStart.DayOfWeek)
+			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.Slot.TimeStart)
 			</th>
@@ -26,30 +29,39 @@
 			</th>
 			<th></th>
 		</tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-		<tr>
-			<td>
-				@Html.DisplayFor(modelItem => item.Slot.TimeStart)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Slot.TimeEnd)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Slot.Duration)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.Patient.Name)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.IsCancelled)
-			</td>
-			<td>
-				<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-				<a asp-action="Delete" asp-route-id="@item.Id">Complete</a>
-			</td>
-		</tr>
-}
-    </tbody>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Slot.TimeStart.DayOfWeek)
+				</td>
+				<td>
+					@(item.Slot.TimeStart.ToString("dd MMMM"))
+				</td>
+				<td>
+					@(item.Slot.TimeStart.ToString("h:mm tt"))
+					<br /> ~
+					@( item.Slot.TimeEnd.ToString("h:mm tt"))
+				</td>
+
+				<td>
+					@Html.DisplayFor(modelItem => item.Slot.Duration)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Patient.Name)
+				</td>
+				<td>
+					<span style="color: red">@(item.IsCancelled ? "Cancelled" : "")</span>
+				</td>
+				<td>
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Complete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
+
+

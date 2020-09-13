@@ -16,6 +16,8 @@ using Microsoft.Extensions.Azure;
 using Azure.Storage.Queues;
 using Azure.Storage.Blobs;
 using Azure.Core.Extensions;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace OnlineClinic
 {
@@ -72,6 +74,22 @@ namespace OnlineClinic
 			app.UseStaticFiles();
 			//app.UseCookiePolicy();
 			app.UseAuthentication();
+
+
+			//Localization
+			//Set system native culture (lang and currency)
+			var supportedCultures = new[]
+			{
+				new CultureInfo("en-my"), //English Malaysia, use RM instead of $
+            };
+			app.UseRequestLocalization(new RequestLocalizationOptions
+			{
+				DefaultRequestCulture = new RequestCulture("en-my"),
+				SupportedCultures = supportedCultures,
+				SupportedUICultures = supportedCultures
+			});
+			//
+
 
 			app.UseMvc(routes =>
 			{

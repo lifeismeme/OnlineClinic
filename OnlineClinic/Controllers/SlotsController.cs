@@ -15,59 +15,60 @@ namespace OnlineClinic.Controllers
 	public class SlotsController : Controller
 	{
 		private readonly OnlineClinicContext _context;
+		private readonly Slots slots;
 
 		public SlotsController(OnlineClinicContext context)
 		{
 			_context = context;
+			slots = new Slots();
 		}
 
 		// GET: Slots
 		public async Task<IActionResult> Index()
 		{
 			var list = new List<Slot>();
-			using (var slots = new Slots())
-			{
-				slots.Load();
-				list.AddRange(slots.GetAllLoaded());
-			}
 
-			return View(list);
+			slots.Load();
+			list.AddRange(slots.GetAllLoaded());
+
+
+			return View(list.OrderBy(s => s.TimeStart));
 		}
-
-
 
 		public async Task<IActionResult> Book(string partitionKey, string rowKey)
 		{
 			try
 			{
-				var appointment = new Appointment();
+				var tbl = slots.CloudeTableStorage;
 
-				Patient patient = _context.Patient.First(p => p.AspNetUsersId == Patient.CreatePatient(User).AspNetUsersId);
-				appointment.Doctor = (Doctor)_context.Staff.FirstOrDefault(s => s.AspNetUsersId == Doctor.DoctorAspNetUsersId);
-				appointment.Patient = _context.Patient.First(p => p.Id == patient.Id);
-				appointment.IsCancelled = false;
+				var slot = tbl.Retrieve<Slot>(partitionKey, rowKey);
 
-				using (var tbl = new CloudTableStorage())
-					appointment.Slot = tbl.Retrieve<Slot>(partitionKey, rowKey);
+				_context.Add(GetAppointment(slot));
+				Task<int> saving = _context.SaveChangesAsync();
+				slots.Update(slot);
 
-				_context.Add(appointment);
-				_context.SaveChanges();
-		
-
-				//return to index
-				var list = new List<Slot>();
-				using (var slots = new Slots())
-				{
-					slots.Load();
-					list.AddRange(slots.GetAllLoaded());
-				}
-				return View("Index",list);
+				await saving;
+				return RedirectToAction("Index");
 			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex.Message);
 				return NotFound();
 			}
+		}
+
+		private Appointment GetAppointment(Slot slot)
+		{
+			var appointment = new Appointment();
+
+			appointment.Slot = slot;
+
+			Patient patient = _context.Patient.First(p => p.AspNetUsersId == Patient.CreatePatient(User).AspNetUsersId);
+			appointment.Doctor = (Doctor)_context.Staff.FirstOrDefault(s => s.AspNetUsersId == Doctor.DoctorAspNetUsersId);
+			appointment.Patient = _context.Patient.First(p => p.Id == patient.Id);
+			appointment.IsCancelled = false;
+
+			return appointment;
 		}
 
 		// GET: Slots/Details/5
@@ -91,6 +92,8 @@ namespace OnlineClinic.Controllers
 		// GET: Slots/Create
 		public IActionResult Create()
 		{
+			if (!Doctor.IsDoctor(User))	return NotFound();
+
 			return View();
 		}
 
@@ -99,15 +102,15 @@ namespace OnlineClinic.Controllers
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,TimeStart,Duration,IsBooked")] Slot slot)
+		public async Task<IActionResult> Create(DateTime date)
 		{
-			if (ModelState.IsValid)
-			{
-				_context.Add(slot);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			return View(slot);
+			if (!Doctor.IsDoctor(User)) return NotFound();
+
+			date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+
+			slots.ResetAllSlots(date);
+
+			return View();
 		}
 
 		// GET: Slots/Edit/5

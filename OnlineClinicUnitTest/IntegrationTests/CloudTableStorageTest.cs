@@ -8,12 +8,12 @@ namespace OnlineClinicUnitTest
 {
 	public class CloudTableStorageTest
 	{
-		private static readonly DateTime NOW = DateTime.Now;
+		private static readonly DateTime NOW = DateTime.UtcNow;
 		private Slot SampleSlot()
 		{
 			return new Slot()
 			{
-				PartitionKey = "Monday",
+				PartitionKey = NOW.DayOfWeek.ToString(),
 				RowKey = "Slot 1",
 				TimeStart = NOW,
 				Duration = TimeSpan.FromMinutes(30)
@@ -28,7 +28,18 @@ namespace OnlineClinicUnitTest
 
 			tbl.Insert(slot);
 			Assert.True(true);
+		}
 
+		[Fact]
+		public void Update_Slot_NoError()
+		{
+			var tbl = new CloudTableStorage();
+			var slot = SampleSlot();
+			slot.IsBooked = true;
+
+			tbl.Update(slot);
+
+			Assert.True(true);
 		}
 
 		[Fact]
@@ -62,8 +73,7 @@ namespace OnlineClinicUnitTest
 				};
 				Assert.NotNull(slot);
 			}
-
-
 		}
+
 	}
 }

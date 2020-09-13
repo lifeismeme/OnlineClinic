@@ -6,14 +6,24 @@
 
 <h2>Slots</h2>
 
-<p>
-	<a asp-action="Create">Create New</a>
-</p>
+@if (Doctor.IsDoctor(User))
+{
+	<p>
+		<a asp-action="Create">Open slots</a>
+	</p>
+}
+
 <table class="table">
 	<thead>
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.TimeStart)
+				@Html.DisplayNameFor(model => model.TimeStart.DayOfWeek)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.TimeStart.Date)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.TimeStart.Hour)
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.Duration)
@@ -29,39 +39,53 @@
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.TimeStart)
-					<br /> ~
-					@Html.DisplayFor(modelItem => item.TimeEnd)
+					@Html.DisplayFor(modelItem => item.TimeStart.DayOfWeek)
 				</td>
+				<td>
+					@(item.TimeStart.ToString("dd MMMM"))
+				</td>
+				<td>
+					@(item.TimeStart.ToString("h:mm tt"))
+					<br /> ~
+					@( item.TimeEnd.ToString("h:mm tt"))
+				</td>
+
 				<td>
 					@Html.DisplayFor(modelItem => item.Duration)
 				</td>
 				<td>
 					@if (item.IsBooked)
 					{
-						<span color="red">
-							<del>Available</del>
-							<br />
+						<span style="color: red">
 							Booked
 						</span>
 					}
 					else
 					{
-						<b color="green">Available</b>
+						<span style="color: green">
+							<b>Available</b>
+						</span>
 					}
 
 				</td>
 
 				<td>
 
-					<a asp-action="Book" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Book</a> |
 
 
-					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					@if (Doctor.IsDoctor(User))
+					{
+						<span>
+							<a asp-action="Book" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Close Slot</a> |
+							<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+						</span>
+					}
+					else
+					{
 
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+						<a asp-action="Book" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Book</a>
+					}
 
-					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
 
 				</td>
 
