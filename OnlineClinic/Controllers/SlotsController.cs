@@ -27,9 +27,17 @@ namespace OnlineClinic.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var list = new List<Slot>();
-
 			slots.Load();
-			list.AddRange(slots.GetAllLoaded());
+
+			if (Doctor.IsDoctor(User))
+			{
+				list.AddRange(slots.GetAllLoaded());
+			}
+			else
+			{
+				DateTime now = DateTime.Now;
+				list.AddRange(slots.GetAllLoaded().Where(s => s.TimeStart >= now));
+			}
 
 
 			return View(list.OrderBy(s => s.TimeStart));
@@ -92,7 +100,7 @@ namespace OnlineClinic.Controllers
 		// GET: Slots/Create
 		public IActionResult Create()
 		{
-			if (!Doctor.IsDoctor(User))	return NotFound();
+			if (!Doctor.IsDoctor(User)) return NotFound();
 
 			return View();
 		}

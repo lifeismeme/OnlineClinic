@@ -39,8 +39,10 @@ namespace OnlineClinic.Controllers
 			//									where s.Id == a.SlotId
 			//									select s).First());
 
-
-			var appointments = _context.Appointment.Include(a => a.Doctor).Include(a => a.Patient).Include(a => a.Slot).ToList();
+			var patient = Patient.CreatePatient(User);
+			var appointments = _context.Appointment
+				.Include(a => a.Patient).Where(a => a.Patient.AspNetUsersId == patient.AspNetUsersId)
+				.Include(a => a.Doctor).Include(a => a.Slot).ToList();
 			return View(appointments);
 
 		}
