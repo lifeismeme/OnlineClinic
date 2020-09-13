@@ -8,8 +8,8 @@ namespace OnlineClinic.Models
 {
 	public class Doctor : Staff
 	{
-		public static readonly string DoctorAspNetUsersId = "ba222a87-d888-49c2-a648-668a8d8dfb15";
-		public static readonly string DoctorName = "MrDoctor";
+		public static string DoctorAspNetUsersId = "ba222a87-d888-49c2-a648-668a8d8dfb15";
+		public static string DoctorName = "MrDoctor";
 		public static Doctor CreateDefaultDoctor()
 		{
 			return new Doctor()
@@ -22,7 +22,7 @@ namespace OnlineClinic.Models
 
 		public static bool IsDoctor(ClaimsPrincipal User)
 		{
-			return User.FindFirst(ClaimTypes.NameIdentifier).Value == DoctorAspNetUsersId;
+			return User.FindFirst(ClaimTypes.NameIdentifier)?.Value == DoctorAspNetUsersId;
 		}
 	}
 }

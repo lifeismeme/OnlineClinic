@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OnlineClinic.Areas.Identity.Data;
 using OnlineClinic.Models;
+using OnlineClinic.Repositories;
+using static OnlineClinic.Models.Staff;
 
 namespace OnlineClinic.Controllers
 {
@@ -13,14 +16,51 @@ namespace OnlineClinic.Controllers
 	{
 		private OnlineClinicContext _context;
 
+		private readonly ServiceBus sb;
 		public HomeController(OnlineClinicContext context)
 		{
 			_context = context;
+
+			setFirstPatientAsDoctor();
+			setDefaultDoctor();
+
+			sb = new ServiceBus();
+			sb.SetHandler(
+				ServiceBus.DefaultMessageHandler(),
+				ServiceBus.DefaultErrorHandler()
+				);
 		}
 
+		private void setFirstPatientAsDoctor()
+		{
+			Patient p = _context.Patient.FirstOrDefault();
+			if (p == null)
+				return;
+
+			if (_context.Staff.FirstOrDefault() == null)
+				return;
+
+			var staff = new Doctor() { 
+				AspNetUsersId = p.AspNetUsersId,
+				Name = p.Name,
+				Title = JobTitle.Doctor,
+			};
+			_context.Add(staff);
+		}
+
+		private void setDefaultDoctor()
+		{
+			Staff doctor = _context.Staff.FirstOrDefault();
+			if (doctor == null)
+				return;
+
+			Doctor.DoctorAspNetUsersId = doctor.AspNetUsersId;
+			Doctor.DoctorName = doctor.Name;
+		}
 
 		public IActionResult Index()
 		{
+			sb.Send(Encoding.UTF8.GetBytes("-hello World- " + DateTime.Now));
 			return View();
 		}
 

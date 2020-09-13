@@ -38,11 +38,15 @@ namespace OnlineClinic.Controllers
 			//appointments.ForEach(a => a.Slot = (from s in _context.Slot
 			//									where s.Id == a.SlotId
 			//									select s).First());
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
 
+			var Yesterday = DateTime.Now.Date - TimeSpan.FromDays(1);
 			var patient = Patient.CreatePatient(User);
 			var appointments = _context.Appointment
 				.Include(a => a.Patient).Where(a => a.Patient.AspNetUsersId == patient.AspNetUsersId)
-				.Include(a => a.Doctor).Include(a => a.Slot).ToList();
+				.Include(a => a.Doctor).Include(a => a.Slot)
+				.Where(a => a.Slot.TimeStart >= Yesterday).ToList();
 			return View(appointments);
 
 		}
@@ -50,6 +54,8 @@ namespace OnlineClinic.Controllers
 		// GET: Appointments/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
 			if (id == null) return NotFound();
 
 
@@ -63,6 +69,8 @@ namespace OnlineClinic.Controllers
 		// GET: Appointments/Create
 		public IActionResult Create()
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
 			return View();
 		}
  
@@ -73,6 +81,8 @@ namespace OnlineClinic.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(Appointment appointment)
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
 			if (appointment.Slot == null)
 				return NotFound();
 			try
@@ -98,6 +108,8 @@ namespace OnlineClinic.Controllers
 
 		public async Task<IActionResult> Cancel(int? id)
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
 			if (id == null)
 				return NotFound();
 
@@ -113,6 +125,9 @@ namespace OnlineClinic.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CancelConfirmed(int id)
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
+
 			var appointment = await _context.Appointment.FindAsync(id);
 			appointment.IsCancelled = true;
 			_context.Appointment.Update(appointment);

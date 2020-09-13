@@ -26,6 +26,9 @@ namespace OnlineClinic.Controllers
 		// GET: Slots
 		public async Task<IActionResult> Index()
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
+
 			var list = new List<Slot>();
 			slots.Load();
 
@@ -45,6 +48,8 @@ namespace OnlineClinic.Controllers
 
 		public async Task<IActionResult> Book(string partitionKey, string rowKey)
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
 			try
 			{
 				var tbl = slots.CloudeTableStorage;

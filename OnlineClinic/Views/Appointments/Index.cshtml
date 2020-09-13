@@ -7,16 +7,18 @@
 <h2>Index</h2>
 
 <p>
-	<a asp-action="Create">Create New</a>
+	<!-- <a asp-action="Create">Create New</a> -->
 </p>
+
 <table class="table">
 	<thead>
 		<tr>
 			<th>Id</th>
-			<th>Date Time</th>
-			<th>until</th>
+			<th>Day</th>
+			<th>Date</th>
+			<th>Time</th>
 			<th>Duration</th>
-			<th>is cancel</th>
+			<th>status</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -24,10 +26,11 @@
 		{
 			<tr>
 				<td>@A.Id</td>
-				<td>@A.Slot.TimeStart</td>
-				<td>@A.Slot.TimeEnd</td>
+				<td>@A.Slot.TimeStart.DayOfWeek</td>
+				<td>@A.Slot.TimeStart.Date</td>
+				<td>@A.Slot.TimeStart.ToString("h:mm tt") <br /> ~ @A.Slot.TimeEnd.ToString("h:mm tt")</td>
 				<td>@A.Slot.Duration</td>
-				<td>@A.IsCancelled</td>
+				<td><span style="color: red">@(A.IsCancelled ? "Cancelled" : "")</span></td>
 
 				<td>
 					<a asp-action="Cancel" asp-route-id="@A.Id">Cancel</a>

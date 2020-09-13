@@ -21,6 +21,11 @@ namespace OnlineClinic.Controllers
 		// GET: ViewAppointment
 		public async Task<IActionResult> Index()
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
+			if (!Doctor.IsDoctor(User))
+				return NotFound();
+
 			var onlineClinicContext = _context.Appointment.Include(a => a.Doctor).Include(a => a.Patient).Include(a => a.Slot);
 
 			
@@ -31,10 +36,13 @@ namespace OnlineClinic.Controllers
 		// GET: ViewAppointment/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
-			if (id == null)
-			{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
+			if (!Doctor.IsDoctor(User))
 				return NotFound();
-			}
+
+			if (id == null)
+				return NotFound();
 
 			var appointment = await _context.Appointment
 				.Include(a => a.Doctor)
@@ -52,10 +60,13 @@ namespace OnlineClinic.Controllers
 		// GET: ViewAppointment/Delete/5
 		public async Task<IActionResult> Delete(int? id)
 		{
-			if (id == null)
-			{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
+			if (!Doctor.IsDoctor(User))
 				return NotFound();
-			}
+			if (id == null)
+				return NotFound();
+
 
 			var appointment = await _context.Appointment
 				.Include(a => a.Doctor)
@@ -63,9 +74,8 @@ namespace OnlineClinic.Controllers
 				.Include(a => a.Slot)
 				.FirstOrDefaultAsync(m => m.Id == id);
 			if (appointment == null)
-			{
 				return NotFound();
-			}
+
 
 			return View(appointment);
 		}
@@ -75,6 +85,11 @@ namespace OnlineClinic.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
+			if (!User.Identity.IsAuthenticated)
+				return Redirect("Identity/Account/Login");
+			if (!Doctor.IsDoctor(User))
+				return NotFound();
+
 			var appointment = await _context.Appointment.FindAsync(id);
 			_context.Appointment.Remove(appointment);
 			await _context.SaveChangesAsync();

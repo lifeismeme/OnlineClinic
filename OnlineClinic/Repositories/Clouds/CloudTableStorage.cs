@@ -11,24 +11,21 @@ namespace OnlineClinic.Repositories
 
 		public CloudTableStorage()
 		{
-			LoadTable(LoadConfig());
+			LoadTable(Program.GetConfig());
 		}
 
-		private IConfiguration LoadConfig()
+		public CloudTableStorage(IConfigurationRoot config)
 		{
-			var builder = new ConfigurationBuilder()
-				//.SetBasePath(dir)
-				.AddJsonFile("appsettings.json");
-			return builder.Build();
+			LoadTable(config);
 		}
 
 		private void LoadTable(IConfiguration config)
 		{
-			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(config["ConnectionStrings:AzureTableStorage:ConnectionString"]);
+			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(config["Azure:TableStorage:ConnectionString"]);
 
 			var tblClient = storageAccount.CreateCloudTableClient();
 
-			CloudTable = tblClient.GetTableReference(config["ConnectionStrings:AzureTableStorage:TableName"]);
+			CloudTable = tblClient.GetTableReference(config["Azure:TableStorage:TableName"]);
 		}
 
 		public void Insert(TableEntity row)
