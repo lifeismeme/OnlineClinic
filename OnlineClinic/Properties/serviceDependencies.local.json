@@ -16,7 +16,7 @@
       "secretStore": "LocalSecretsFile"
     },
     "mssql1": {
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/onlineclinicdbserver/databases/OnlineClinic_db",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/onlineclinicdbserver/databases/OnlineClinic_db",
       "type": "mssql.azure",
       "connectionId": "OnlineClinicContextConnection",
       "secretStore": "LocalSecretsFile"
