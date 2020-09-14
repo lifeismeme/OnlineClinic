@@ -19,10 +19,20 @@ namespace OnlineClinic
 
 		public static IConfigurationRoot GetConfig()
 		{
-			var builder = new ConfigurationBuilder()
+			try
+			{
+				var builder = new ConfigurationBuilder()
 				.SetBasePath(Environment.CurrentDirectory)
 				.AddJsonFile("appsettings.json");
-			return builder.Build();
+				return builder.Build();
+			}
+			catch (Exception ex)
+			{
+				Console.Error.WriteLine(ex.ToString());
+				Console.Error.WriteLine(ex.Message);
+				throw;
+			}
+			
 		}
 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
