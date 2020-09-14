@@ -26,12 +26,19 @@ namespace OnlineClinic.Repositories
 			connectionString = config["Azure:ServiceBus:ConnectionString"];
 			queueName = config["Azure:ServiceBus:QueueName"];
 		}
-		
-		public void Send(byte[] data)
-		{ 
+
+		public async void Send(byte[] data)
+		{
 			var message = new Message(data);
 
-			new QueueClient(connectionString, queueName).SendAsync(message);
+			await new QueueClient(connectionString, queueName).SendAsync(message);
+		}
+
+		public async void Send(string data)
+		{
+			var message = new Message(Encoding.UTF8.GetBytes(data));
+
+			await new QueueClient(connectionString, queueName).SendAsync(message);
 		}
 
 		public async void SetHandler(Action<Message, CancellationToken> handler, Func<ExceptionReceivedEventArgs, Task> errorHandler)
@@ -44,7 +51,8 @@ namespace OnlineClinic.Repositories
 					MaxConcurrentCalls = 1,
 					AutoComplete = false
 				};
-				queueClient.RegisterMessageHandler(async (Msg, cancelToken) => {
+				queueClient.RegisterMessageHandler(async (Msg, cancelToken) =>
+				{
 					try
 					{
 						handler.Invoke(Msg, cancelToken);
@@ -58,31 +66,37 @@ namespace OnlineClinic.Repositories
 
 		}
 
-		public static Action<Message, CancellationToken> DefaultMessageHandler()
+		public static Action<Message, CancellationToken> DefaultMessageHandler
 		{
-			return new Action<Message, CancellationToken>((Msg, cancelToken) =>
+			get
 			{
-				Console.WriteLine($"- SequenceNumber: {Msg.SystemProperties.SequenceNumber}");
-				Console.WriteLine($"  - Body:{Encoding.UTF8.GetString(Msg.Body)} ");
+				return new Action<Message, CancellationToken>((Msg, cancelToken) =>
+				{
+					Console.WriteLine($"- SequenceNumber: {Msg.SystemProperties.SequenceNumber}");
+					Console.WriteLine($"  - Body:{Encoding.UTF8.GetString(Msg.Body)} ");
 
-				Debug.WriteLine($"- SequenceNumber: {Msg.SystemProperties.SequenceNumber}");
-				Debug.WriteLine($"  - Body:{Encoding.UTF8.GetString(Msg.Body)} ");
-			});
+					Debug.WriteLine($"- SequenceNumber: {Msg.SystemProperties.SequenceNumber}");
+					Debug.WriteLine($"  - Body:{Encoding.UTF8.GetString(Msg.Body)} ");
+				});
+			}
 		}
 
-		public static Func<ExceptionReceivedEventArgs, Task> DefaultErrorHandler()
+		public static Func<ExceptionReceivedEventArgs, Task> DefaultErrorHandler
 		{
-			return new Func<ExceptionReceivedEventArgs, Task>(arg =>
+			get
 			{
-				return Task.Run(() =>
+				return new Func<ExceptionReceivedEventArgs, Task>(arg =>
 				{
-					Console.Error.WriteLine(arg.Exception.ToString());
-					Console.Error.WriteLine($"- Error: {arg.Exception.Message}");
+					return Task.Run(() =>
+					{
+						Console.Error.WriteLine(arg.Exception.ToString());
+						Console.Error.WriteLine($"- Error: {arg.Exception.Message}");
 
-					Debug.WriteLine(arg.Exception.ToString());
-					Debug.WriteLine($"- Error: {arg.Exception.Message}");
+						Debug.WriteLine(arg.Exception.ToString());
+						Debug.WriteLine($"- Error: {arg.Exception.Message}");
+					});
 				});
-			});
+			}
 		}
 
 	}

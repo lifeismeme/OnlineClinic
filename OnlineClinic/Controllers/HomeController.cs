@@ -26,8 +26,8 @@ namespace OnlineClinic.Controllers
 
 			sb = new ServiceBus();
 			sb.SetHandler(
-				ServiceBus.DefaultMessageHandler(),
-				ServiceBus.DefaultErrorHandler()
+				ServiceBus.DefaultMessageHandler,
+				ServiceBus.DefaultErrorHandler
 				);
 		}
 
@@ -60,7 +60,13 @@ namespace OnlineClinic.Controllers
 
 		public IActionResult Index()
 		{
-			sb.Send(Encoding.UTF8.GetBytes("-hello World- " + DateTime.Now));
+			string aUser;
+			if (User.Identity.IsAuthenticated)
+				aUser = User.Identity.Name;
+			else
+				aUser = "a User";
+
+			sb.Send(Encoding.UTF8.GetBytes($"Info: {aUser} visit Home Page! time: " + DateTime.Now));
 			return View();
 		}
 

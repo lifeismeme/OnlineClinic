@@ -17,10 +17,19 @@ namespace OnlineClinic.Controllers
 		private readonly OnlineClinicContext _context;
 		private readonly Slots slots;
 
+		private readonly ServiceBus sb;
+
 		public SlotsController(OnlineClinicContext context)
 		{
 			_context = context;
+
 			slots = new Slots();
+
+			sb = new ServiceBus();
+			sb.SetHandler(
+				ServiceBus.DefaultMessageHandler,
+				ServiceBus.DefaultErrorHandler
+				);
 		}
 
 		// GET: Slots
@@ -61,6 +70,7 @@ namespace OnlineClinic.Controllers
 				slots.Update(slot);
 
 				await saving;
+				sb.Send($"User: {User.Identity.Name} booked the slot: p[{slot.PartitionKey}] r[{slot.RowKey}] v[{slot.TimeStart}]");
 				return RedirectToAction("Index");
 			}
 			catch (Exception ex)
