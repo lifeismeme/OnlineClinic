@@ -75,7 +75,7 @@ namespace OnlineClinic.Controllers
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine(ex.Message);
+				Console.Error.WriteLine(ex.Message);
 				return RedirectToAction("Error", "Home");
 			}
 		}

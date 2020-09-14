@@ -91,8 +91,8 @@ namespace OnlineClinic.Controllers
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine(ex.Message);
-				return NotFound();
+				Console.Error.WriteLine(ex.Message);
+				return RedirectToAction("Error");
 			}
 
 		}

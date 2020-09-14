@@ -75,8 +75,8 @@ namespace OnlineClinic.Repositories
 					Console.WriteLine($"- SequenceNumber: {Msg.SystemProperties.SequenceNumber}");
 					Console.WriteLine($"  - Body:{Encoding.UTF8.GetString(Msg.Body)} ");
 
-					Debug.WriteLine($"- SequenceNumber: {Msg.SystemProperties.SequenceNumber}");
-					Debug.WriteLine($"  - Body:{Encoding.UTF8.GetString(Msg.Body)} ");
+					Console.Error.WriteLine($"- SequenceNumber: {Msg.SystemProperties.SequenceNumber}");
+					Console.Error.WriteLine($"  - Body:{Encoding.UTF8.GetString(Msg.Body)} ");
 				});
 			}
 		}
@@ -92,8 +92,8 @@ namespace OnlineClinic.Repositories
 						Console.Error.WriteLine(arg.Exception.ToString());
 						Console.Error.WriteLine($"- Error: {arg.Exception.Message}");
 
-						Debug.WriteLine(arg.Exception.ToString());
-						Debug.WriteLine($"- Error: {arg.Exception.Message}");
+						Console.Error.WriteLine(arg.Exception.ToString());
+						Console.Error.WriteLine($"- Error: {arg.Exception.Message}");
 					});
 				});
 			}
