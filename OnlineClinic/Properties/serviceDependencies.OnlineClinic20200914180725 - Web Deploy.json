@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/onlineclinicdbserver/databases/OnlineClinic_db",
+      "type": "mssql.azure",
+      "connectionId": "Azure/SqlDatabase/ConnectionString",
+      "secretStore": "AzureAppSettings"
+    },
+    "storage2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/tp040971",
+      "type": "storage.azure",
+      "connectionId": "Azure/TableStorage/ConnectionString",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}
