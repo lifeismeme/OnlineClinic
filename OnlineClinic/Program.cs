@@ -14,7 +14,16 @@ namespace OnlineClinic
 	{
 		public static void Main(string[] args)
 		{
-			CreateWebHostBuilder(args).Build().Run();
+			try
+			{
+				CreateWebHostBuilder(args).Build().Run();
+			}
+			catch (Exception ex)
+			{
+				Console.Error.WriteLine(ex.ToString());
+				Console.Error.WriteLine(ex.Message);
+				throw;
+			}
 		}
 
 		public static IConfigurationRoot GetConfig()
@@ -32,7 +41,7 @@ namespace OnlineClinic
 				Console.Error.WriteLine(ex.Message);
 				throw;
 			}
-			
+
 		}
 
 		public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

@@ -46,6 +46,7 @@ namespace OnlineClinic.Controllers
 				Title = JobTitle.Doctor,
 			};
 			_context.Add(staff);
+			_context.SaveChanges();
 		}
 
 		private void setDefaultDoctor()
