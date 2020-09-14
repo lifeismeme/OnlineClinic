@@ -55,6 +55,7 @@ namespace OnlineClinic
 				builder.AddBlobServiceClient(Configuration["ConnectionStrings:DefaultEndpointsProtocol=https;AccountName=tp040971;AccountKey=RGsb3EA7VprieSCnNqO8xJpJlfSlENDi/7+qWt84FgsCO+PXDRhlQdTgmVAgYg/58+pEs51A5AzSfa8IaTfKBw==;EndpointSuffix=core.windows.net:blob"], preferMsi: true);
 				builder.AddQueueServiceClient(Configuration["ConnectionStrings:DefaultEndpointsProtocol=https;AccountName=tp040971;AccountKey=RGsb3EA7VprieSCnNqO8xJpJlfSlENDi/7+qWt84FgsCO+PXDRhlQdTgmVAgYg/58+pEs51A5AzSfa8IaTfKBw==;EndpointSuffix=core.windows.net:queue"], preferMsi: true);
 			});
+			services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

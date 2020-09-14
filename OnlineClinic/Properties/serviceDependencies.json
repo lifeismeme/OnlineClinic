@@ -6,6 +6,10 @@
     "storage1": {
       "type": "storage",
       "connectionId": "DefaultEndpointsProtocol=https;AccountName=tp040971;AccountKey=RGsb3EA7VprieSCnNqO8xJpJlfSlENDi/7+qWt84FgsCO+PXDRhlQdTgmVAgYg/58+pEs51A5AzSfa8IaTfKBw==;EndpointSuffix=core.windows.net"
+    },
+    "appInsights1": {
+      "type": "appInsights",
+      "connectionId": "APPINSIGHTS_INSTRUMENTATIONKEY"
     }
   }
 }

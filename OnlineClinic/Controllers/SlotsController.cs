@@ -37,7 +37,7 @@ namespace OnlineClinic.Controllers
 		{
 			if (!User.Identity.IsAuthenticated)
 				return Redirect("Identity/Account/Login");
-
+			
 			var list = new List<Slot>();
 			slots.Load();
 
@@ -76,7 +76,7 @@ namespace OnlineClinic.Controllers
 			catch (Exception ex)
 			{
 				Debug.WriteLine(ex.Message);
-				return NotFound();
+				return RedirectToAction("Error", "Home");
 			}
 		}
 

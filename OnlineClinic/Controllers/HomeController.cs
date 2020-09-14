@@ -119,5 +119,10 @@ namespace OnlineClinic.Controllers
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
+
+		public IActionResult Exception()
+		{
+			throw new Exception("- test sample Exception -");
+		}
 	}
 }
