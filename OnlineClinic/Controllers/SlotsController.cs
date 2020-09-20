@@ -37,20 +37,12 @@ namespace OnlineClinic.Controllers
 		{
 			if (!User.Identity.IsAuthenticated)
 				return Redirect("Identity/Account/Login");
-			
+
 			var list = new List<Slot>();
 			slots.Load();
 
-			if (Doctor.IsDoctor(User))
-			{
-				list.AddRange(slots.GetAllLoaded());
-			}
-			else
-			{
-				DateTime now = DateTime.Now;
-				list.AddRange(slots.GetAllLoaded().Where(s => s.TimeStart >= now));
-			}
-
+			DateTime now = DateTime.Now;
+			list.AddRange(slots.GetAllLoaded().Where(s => s.TimeStart >= now));
 
 			return View(list.OrderBy(s => s.TimeStart));
 		}
@@ -64,6 +56,7 @@ namespace OnlineClinic.Controllers
 				var tbl = slots.CloudeTableStorage;
 
 				var slot = tbl.Retrieve<Slot>(partitionKey, rowKey);
+				slot.Id = 0;
 
 				_context.Add(GetAppointment(slot));
 				Task<int> saving = _context.SaveChangesAsync();

@@ -17,7 +17,7 @@
 		<form asp-action="Create">
 
 			<div class="form-group">
-				<input type="date" name="date" required />
+				<input type="date" name="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" required />
 				<input type="submit" value="Open & Reset" class="btn btn-default" />
 			</div>
 

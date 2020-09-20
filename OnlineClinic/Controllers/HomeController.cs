@@ -37,7 +37,7 @@ namespace OnlineClinic.Controllers
 			if (p == null)
 				return;
 
-			if (_context.Staff.FirstOrDefault() == null)
+			if (_context.Staff.FirstOrDefault() != null)
 				return;
 
 			var staff = new Doctor() { 
