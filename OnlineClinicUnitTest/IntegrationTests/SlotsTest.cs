@@ -60,7 +60,7 @@ namespace OnlineClinicUnitTest
 		}
 
 
-		public void ff()
+		public void DateTimeLogic()
 		{
 			var today = NOW.Date;
 			var start = today.AddHours(8);
@@ -68,6 +68,19 @@ namespace OnlineClinicUnitTest
 
 			var week = NOW.DayOfWeek;
 			Assert.True(false);
+		}
+
+		public void H()
+		{
+			var set = new string[] { "a", "b" };
+			var empty = new string[] { };
+
+			var f = set.FirstOrDefault();
+			var f2 = empty.FirstOrDefault();
+
+
+			Assert.Equal("a",f );
+			Assert.Equal(null, f2);
 		}
 	}
 }
