@@ -45,7 +45,27 @@
 			@Html.DisplayNameFor(model => model.IsCancelled)
 		</dt>
 		<dd>
-			@Html.DisplayFor(model => model.IsCancelled)
+			<p style="color: red">@(Model.IsCancelled ? "Cancelled" : "" )</p>
+			<div>
+				@{
+					var timeDiff = Model.Slot.TimeStart - DateTime.Now;
+					if (timeDiff.TotalMinutes < Model.Slot.Duration.TotalMinutes)
+					{
+						<p style="color: grey">expired</p>
+					}
+					else
+					{
+						if (timeDiff.TotalMinutes < -1.0)
+						{
+							<p style="color: red">now</p>
+						}
+						else
+						{
+							<p>in @($"{timeDiff.Hours} h {timeDiff.Minutes} min")</p>
+						}
+					}
+				}
+			</div>
 		</dd>
 	</dl>
     

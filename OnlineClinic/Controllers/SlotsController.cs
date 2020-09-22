@@ -57,6 +57,9 @@ namespace OnlineClinic.Controllers
 
 				var slot = tbl.Retrieve<Slot>(partitionKey, rowKey);
 				slot.Id = 0;
+				if (slot.IsBooked)
+					return RedirectToAction("Index");
+				slot.IsBooked = true;
 
 				_context.Add(GetAppointment(slot));
 				Task<int> saving = _context.SaveChangesAsync();

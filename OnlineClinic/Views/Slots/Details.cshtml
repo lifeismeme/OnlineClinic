@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Appointment Detail</h2>
 
 <div>
     <h4>Slot</h4>
@@ -26,7 +26,7 @@
             @Html.DisplayNameFor(model => model.IsBooked)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IsBooked)
+            @(Model.IsBooked ? "Booked" : "Available")
         </dd>
     </dl>
 </div>

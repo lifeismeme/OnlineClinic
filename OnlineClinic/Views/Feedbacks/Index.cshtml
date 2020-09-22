@@ -1,0 +1,14 @@
+﻿@{
+	ViewData["Title"] = "feedback";
+}
+
+<h1>DDAC - Online Health Care</h1>
+<form asp-action="Create">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="form-group">
+
+		<textarea cols="60" rows="20" name="txtFeedback" placeholder="feedback..." width="100" height="200" required></textarea>
+
+	</div>
+	<input type="submit" value="Submit" class="btn btn-default" />
+</form>

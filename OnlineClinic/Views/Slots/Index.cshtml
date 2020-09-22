@@ -66,17 +66,16 @@
 							<b>Available</b>
 						</span>
 					}
-
 				</td>
 
 				<td>
-
-
-
 					@if (Doctor.IsDoctor(User))
 					{
 						<span>
-							<a asp-action="Book" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Close Slot</a> |
+						@if (!item.IsBooked)
+						{
+							<span><a asp-action="Book" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Close Slot</a> | </span>
+						}
 							<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
 						</span>
 					}
@@ -85,8 +84,6 @@
 
 						<a asp-action="Book" asp-route-partitionkey="@item.PartitionKey" asp-route-rowkey="@item.RowKey">Book</a>
 					}
-
-
 				</td>
 
 			</tr>

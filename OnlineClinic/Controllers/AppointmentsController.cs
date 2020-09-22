@@ -84,7 +84,7 @@ namespace OnlineClinic.Controllers
 			if (!User.Identity.IsAuthenticated)
 				return Redirect("Identity/Account/Login");
 			if (appointment.Slot == null)
-				return NotFound();
+				return RedirectToAction("Error", "Home");
 			try
 			{
 				Patient patient = _context.Patient.First(p => p.AspNetUsersId == Patient.CreatePatient(User).AspNetUsersId);
@@ -111,12 +111,12 @@ namespace OnlineClinic.Controllers
 			if (!User.Identity.IsAuthenticated)
 				return Redirect("Identity/Account/Login");
 			if (id == null)
-				return NotFound();
+				return RedirectToAction("Error", "Home");
 
 			var appointment = await _context.Appointment
 				.FirstOrDefaultAsync(m => m.Id == id);
 			if (appointment == null)
-				return NotFound();
+				return RedirectToAction("Error", "Home");
 			return View(appointment);
 		}
 
